@@ -75,11 +75,9 @@ unsigned int Compute(const Instruction& ins, int V1, int V2, int pc) {
         case END : {
             return 0;
         }
-        case JAL : {
-            return pc;
-        }
+        case JAL :
         case JALR : {
-            return pc;
+            return ins.tmp + 4;
         }
         case BEQ : {
             return V1 == V2;
@@ -110,14 +108,14 @@ unsigned Load(const Instruction &ins, int dest) {
     switch (ins.op) {
         case LB : {
             int offset = dest % 4;
-            int tmp = (mem[dest - offset] >> (offset << 3)) & 0xff;
-            if (tmp >> 7) tmp |= 0xffffff00;
+            int tmp = (mem[dest - offset] >> (offset << 3)) & 0xff; //NOLINT
+            if (tmp >> 7) tmp |= 0xffffff00; //NOLINT
             return tmp;
         }
         case LH : {
             int offset = dest % 4;
-            int tmp = (mem[dest - offset] >> (offset << 3)) & 0xffff;
-            if (tmp >> 15) tmp |= 0xffff0000;
+            int tmp = (mem[dest - offset] >> (offset << 3)) & 0xffff; //NOLINT
+            if (tmp >> 15) tmp |= 0xffff0000; //NOLINT
             return tmp;
         }
         case LW : {

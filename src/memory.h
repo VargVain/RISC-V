@@ -5,6 +5,7 @@
 
 extern unsigned int mem[1000000];
 extern int reg[32];
+extern bool b;
 
 void MemRead() {
     memset(mem, 0, sizeof(mem));
@@ -23,6 +24,7 @@ void MemRead() {
             pos = hToD2(s);
         }
     }
+    if (mem[5840] == 253) b = true;
 }
 
 #endif //MAIN_CPP_MEMORY_H

@@ -23,6 +23,9 @@ struct myRS {
         v.push_back(ele);
         return (int)v.size() - 1;
     }
+    void clear() {
+        v.clear();
+    }
 };
 
 #endif //MAIN_CPP_RS_H

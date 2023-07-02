@@ -6,52 +6,29 @@ enum Type {
     BGEU, LB, LH, LW, LBU, LHU, SB, SH, SW, ADDI,
     SLTI, SLTIU, XORI, ORI, ANDI, SLLI, SRLI, SRAI,
     ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND,
-    END
+    END, NONE
 };
 
-std::string name[38] = {"LUI", "AUIPC", "JAL", "JALR", "BEQ", "BNE", "BLT", "BGE", "BLTU",
+
+std::string name[39] = {"LUI", "AUIPC", "JAL", "JALR", "BEQ", "BNE", "BLT", "BGE", "BLTU",
                         "BGEU", "LB", "LH", "LW", "LBU", "LHU", "SB", "SH", "SW", "ADDI",
                         "SLTI", "SLTIU", "XORI", "ORI", "ANDI", "SLLI", "SRLI", "SRAI",
-                        "ADD", "SUB", "SLL", "SLT", "SLTU", "XOR", "SRL", "SRA", "OR", "AND", "END"};
+                        "ADD", "SUB", "SLL", "SLT", "SLTU", "XOR", "SRL", "SRA", "OR",
+                        "AND", "END", "NONE"};
+
 
 struct Instruction {
-    Type op = END;
-    int imm = 0, rd = 0, rs1 = 0, rs2 = 0;
-    bool isJump() {
-        return op == JAL || op == JALR || op == BEQ || op == BNE ||
-               op == BLT || op == BGE || op == BLTU || op == BGEU;
-    }
-    bool isSL() {
-        return op == LB || op == LH || op == LW || op == LBU ||
-               op == LHU || op == SB || op == SH || op == SW;
-    }
-    bool isS() {
-        return op == SB || op == SH || op == SW;
-    }
-    bool isL() {
-        return op == LB || op == LH || op == LW || op == LBU ||
-               op == LHU;
-    }
-    bool isB() {
-        return op == BEQ || op == BNE ||
-               op == BLT || op == BGE || op == BLTU || op == BGEU;
-    }
-    bool isCalc() {
-        return op == LUI || op == AUIPC || op == ADDI || op == SLTI ||
-               op == SLTIU || op == XORI || op == ORI || op == ANDI ||
-               op == SLLI || op == SRLI || op == SRAI || op == ADD ||
-               op == SUB || op == SLL || op == SLT || op == SLTU ||
-               op == XOR || op == SRL || op == SRA || op == OR ||
-               op == AND || op == END;
-    }
-    bool isI() {
-        return op == ADDI || op == SLTI ||
-               op == SLTIU || op == XORI || op == ORI || op == ANDI ||
-               op == SLLI || op == SRLI || op == SRAI || op == JALR;
-    }
-    bool isUorJ() {
-        return op == LUI || op == AUIPC || op == JAL;
-    }
+    Type op = NONE;
+    int imm = 0, rd = 0, rs1 = 0, rs2 = 0, tmp = 0;
+    bool isJump = false,
+         isCalc = false,
+         isS = false,
+         isL = false,
+         isB = false,
+         isI = false,
+         isJ = false,
+         isR = false,
+         isU = false;
 };
 
 #endif //MAIN_CPP_INSTRUCTION_H

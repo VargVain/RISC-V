@@ -20,9 +20,17 @@ struct mySLB {
     }
     int insert(const SLB_ele &ele) {
         int n = nxt(in);
+        if (in && n == frt(hd)) return 0;
         v[n] = ele;
         in = n;
         return n;
+    }
+    void clear() {
+        v.clear();
+        v.emplace_back(SLB_ele());
+        v.resize(CAP);
+        hd = 1;
+        in = 0;
     }
 };
 

@@ -3,7 +3,7 @@
 
 #include <bits/stdc++.h>
 
-const int CAP = 32;
+const int CAP = 128;
 
 inline int hToD1(const std::string &s) {
     int x1, x2;
@@ -26,15 +26,19 @@ inline int hToD2(const std::string &s) {
 }
 
 int Read(const unsigned int &data, int ed, int x, int y) {
-    return ((data >> ed) & ((1 << (x - y + 1)) - 1)) << y;
+    return ((data >> ed) & ((1 << (x - y + 1)) - 1)) << y; //NOLINT
 }
 
 int Read(const unsigned int &data, int a, int b) {
-    return (data >> b) & ((1 << (a - b + 1)) - 1);
+    return (data >> b) & ((1 << (a - b + 1)) - 1); //NOLINT
 }
 
 int nxt(int x) {
     return (x == CAP - 1) ? 1 : (x + 1);
+}
+
+int frt(int x) {
+    return (x == 1) ? CAP - 1 : (x - 1);
 }
 
 #endif //MAIN_CPP_UTILS_H

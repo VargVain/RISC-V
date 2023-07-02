@@ -13,11 +13,15 @@ Instruction Decode(unsigned int data) {
         case 0b0110111 : {
             ret.imm = Read(data, 31, 12) << 12;
             ret.op = LUI;
+            ret.isU = true;
+            ret.isCalc = true;
             break;
         }
         case 0b0010111 : {
             ret.imm = Read(data, 31, 12) << 12;
             ret.op = AUIPC;
+            ret.isU = true;
+            ret.isCalc = true;
             break;
         }
         case 0b1101111 : {
@@ -25,14 +29,18 @@ Instruction Decode(unsigned int data) {
             ret.imm |= Read(data, 21, 10, 1);
             ret.imm |= Read(data, 20, 11, 11);
             ret.imm |= Read(data, 12, 19, 12);
-            if (Read(data, 31, 31)) ret.imm |= 0xfff00000;
+            if (Read(data, 31, 31)) ret.imm |= 0xfff00000; //NOLINT
             ret.op = JAL;
+            ret.isJump = true;
+            ret.isJ = true;
             break;
         }
         case 0b1100111 : {
             ret.imm = Read(data, 31, 20);
-            if (Read(data, 31, 31)) ret.imm |= 0xfffff000;
+            if (Read(data, 31, 31)) ret.imm |= 0xfffff000; //NOLINT
             ret.op = JALR;
+            ret.isJump = true;
+            ret.isI = true;
             break;
         }
         case 0b1100011 : {
@@ -40,7 +48,9 @@ Instruction Decode(unsigned int data) {
             ret.imm |= Read(data, 25, 10, 5);
             ret.imm |= Read(data, 8, 4, 1);
             ret.imm |= Read(data, 7, 11, 11);
-            if (Read(data, 31, 31)) ret.imm |= 0xffffe000;
+            if (Read(data, 31, 31)) ret.imm |= 0xffffe000; //NOLINT
+            ret.isJump = true;
+            ret.isB = true;
             switch (Read(data, 14, 12)) {
                 case 0b000 : {
                     ret.op = BEQ;
@@ -71,7 +81,8 @@ Instruction Decode(unsigned int data) {
         }
         case 0b0000011 : {
             ret.imm = Read(data, 31, 20);
-            if (Read(data, 31, 31)) ret.imm |= 0xfffff000;
+            if (Read(data, 31, 31)) ret.imm |= 0xfffff000; //NOLINT
+            ret.isL = true;
             switch (Read(data, 14, 12)) {
                 case 0b000 : {
                     ret.op = LB;
@@ -99,7 +110,8 @@ Instruction Decode(unsigned int data) {
         case 0b0100011 : {
             ret.imm |= Read(data, 25, 11, 5);
             ret.imm |= Read(data, 7, 4, 0);
-            if (Read(data, 31, 31)) ret.imm |= 0xfffff000;
+            if (Read(data, 31, 31)) ret.imm |= 0xfffff000; //NOLINT
+            ret.isS = true;
             switch (Read(data, 14, 12)) {
                 case 0b000 : {
                     ret.op = SB;
@@ -117,12 +129,14 @@ Instruction Decode(unsigned int data) {
             break;
         }
         case 0b0010011 : {
+            ret.isI = true;
+            ret.isCalc = true;
             if (data == 0x0ff00513) {
                 ret.op = END;
                 break;
             }
             ret.imm = Read(data, 31, 20);
-            if (Read(data, 31, 31)) ret.imm |= 0xfffff000;
+            if (Read(data, 31, 31)) ret.imm |= 0xfffff000; //NOLINT
             switch (Read(data, 14, 12)) {
                 case 0b000 : {
                     ret.op = ADDI;
@@ -163,6 +177,8 @@ Instruction Decode(unsigned int data) {
             break;
         }
         case 0b0110011 : {
+            ret.isR = true;
+            ret.isCalc = true;
             switch (Read(data, 14, 12)) {
                 case 0b000 : {
                     if (Read(data, 30, 30)) ret.op = SUB;
